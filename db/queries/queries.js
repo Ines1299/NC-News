@@ -45,7 +45,20 @@ const db = require("../connection.js");
 
 // Get all of the articles by user grumpy19
 
-db.query("SELECT * FROM articles WHERE user = 'grumpy19")
+// db.query("SELECT * FROM articles WHERE author = 'grumpy19'")
+//   .then((query) => {
+//     console.log(query.rows);
+//   })
+//   .then(() => {
+//     db.end();
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+// Get all of the comments that have more than 10 votes.
+
+db.query("SELECT * FROM comments WHERE votes > 10")
   .then((query) => {
     console.log(query.rows);
   })
