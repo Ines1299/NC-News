@@ -1,5 +1,6 @@
 const db = require("../connection");
 const format = require("pg-format");
+const objectLookup = require("./object-lookup-function");
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db
@@ -82,8 +83,28 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         ];
       });
       const queryStr = format(
-        `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L`,
+        `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *`,
         formattedArticles,
+      );
+      return db.query(queryStr);
+    })
+    .then((result) => {
+      const articlesLookup = objectLookup(result.rows, "title", "article_id");
+      return articlesLookup;
+    })
+    .then((articleLookup) => {
+      const formattedComments = commentData.map((comment) => {
+        return [
+          articleLookup[comment.article_title],
+          comment.body,
+          comment.votes,
+          comment.author,
+          comment.created_at,
+        ];
+      });
+      const queryStr = format(
+        `INSERT INTO comments (article_id, body, votes,author, created_at) VALUES %L`,
+        formattedComments,
       );
       return db.query(queryStr);
     });
