@@ -44,3 +44,14 @@ const db = require("../connection.js");
 //   });
 
 // Get all of the articles by user grumpy19
+
+db.query("SELECT * FROM articles WHERE user = 'grumpy19")
+  .then((query) => {
+    console.log(query.rows);
+  })
+  .then(() => {
+    db.end();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
