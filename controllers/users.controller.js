@@ -1,7 +1,7 @@
-const { fetchUsers } = require("../models/users.model.js");
+const { getAllUsers } = require("../services/users.service.js");
 
 exports.getUsers = (request, response, next) => {
-  fetchUsers()
+  getAllUsers()
     .then((users) => {
       response.status(200).send({ users });
     })

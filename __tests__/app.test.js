@@ -99,3 +99,49 @@ describe("GET: /api/users", () => {
       });
   });
 });
+describe("GET: /api/articles/:article_id", () => {
+  test("200: Responds with an array on the key of article", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body.article).toBe("object");
+      });
+  });
+  test("200: Article object has props: author, title, article_id, topic, created_at, votes, article_img_url, comment_count", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .then(({ body: { article } }) => {
+        expect(typeof article.author).toBe("string");
+        expect(article.author).toBe("butter_bridge");
+        expect(typeof article.title).toBe("string");
+        expect(article.title).toBe("Living in the shadow of a great man");
+        expect(typeof article.created_at).toBe("string");
+        expect(typeof article.votes).toBe("number");
+        expect(article.votes).toBe(100);
+        expect(typeof article.article_img_url).toBe("string");
+        expect(typeof article.article_img_url).toBe("string");
+        expect(article.article_img_url).toBe(
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        );
+        expect(typeof article.topic).toBe("string");
+        expect(article.topic).toBe("mitch");
+      });
+  });
+  test("400: responds with bad request when article_id is invalid", () => {
+    return request(app)
+      .get("/api/articles/bananas")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+  test("404: responds with not found when article_id doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found.");
+      });
+  });
+});

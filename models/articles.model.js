@@ -17,5 +17,27 @@ exports.fetchArticles = () => {
       ORDER BY created_at DESC
 `,
     )
-    .then(({ rows }) => rows);
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
+exports.fetchArticleById = (article_id) => {
+  return db
+    .query(
+      `SELECT
+    articles.author,
+    articles.title,
+    articles.body, 
+    articles.topic,
+    articles.created_at,
+    articles.votes,
+    articles.article_img_url
+    FROM articles
+    WHERE articles.article_id = $1`,
+      [article_id],
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
 };
