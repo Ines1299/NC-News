@@ -1,4 +1,5 @@
 const db = require("../db/connection.js");
+const NotFoundError = require("../errors/not-found-error.js");
 
 exports.fetchArticles = () => {
   return db
@@ -38,6 +39,10 @@ exports.fetchArticleById = (article_id) => {
       [article_id],
     )
     .then(({ rows }) => {
-      return rows[0];
+      if (rows.length === 0) {
+        throw new NotFoundError();
+      } else {
+        return rows[0];
+      }
     });
 };

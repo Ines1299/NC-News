@@ -18,5 +18,8 @@ exports.getArticleById = (request, response, next) => {
       console.log("article from service", article);
       response.status(200).send({ article });
     })
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 };
