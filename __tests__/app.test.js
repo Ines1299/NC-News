@@ -186,3 +186,41 @@ describe("GET: /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("POST: /api/articles/:article_id/comments", () => {
+  test("201: Responds with a comment object", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send({ username: "rogersop", body: "Hello" })
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("400: responds with bad request when article_id is invalid", () => {
+    return request(app)
+      .post("/api/articles/bananas/comments")
+      .send({ username: "rogersop", body: "Hello" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad Request");
+      });
+  });
+  test("400: responds with bad request when theres no body or author", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: "rogersop" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad Request: username and body needed");
+      });
+  });
+  test("404: responds with not found when article_id doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/9999/comments")
+      .send({ username: "rogersop", body: "Hello" })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Article not found.");
+      });
+  });
+});

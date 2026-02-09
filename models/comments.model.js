@@ -24,3 +24,18 @@ exports.fetchCommentsByArticleId = (article_id) => {
       }
     });
 };
+
+exports.insertCommentsByArticleId = (article_id, username, body) => {
+  return db
+    .query(
+      `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING * `,
+      [username, body, article_id],
+    )
+    .then(({ rows }) => {
+      if (rows.lenght === 0) {
+        throw new NotFoundError();
+      } else {
+        return rows[0];
+      }
+    });
+};

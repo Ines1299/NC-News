@@ -4,7 +4,7 @@ const app = express();
 const topicRouter = require("./routes/topics.routes.js");
 const articleRouter = require("./routes/articles.routes.js");
 const usersRouter = require("./routes/users.routes.js");
-const CommentsRouter = require("./routes/comments.routes.js");
+const commentsRouter = require("./routes/comments.routes.js");
 const NotFoundError = require("./errors/not-found-error.js");
 
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use("/api/articles", articleRouter);
 
 app.use("/api/users", usersRouter);
 
-app.use("/api/articles/:article_id/comments", CommentsRouter);
+app.use("/api/articles/:article_id/comments", commentsRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof NotFoundError) {
@@ -34,6 +34,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err);
   res.status(500).send({ message: "Internal Server Error" });
 });
 
