@@ -145,3 +145,44 @@ describe("GET: /api/articles/:article_id", () => {
       });
   });
 });
+describe("GET: /api/articles/:article_id/comments", () => {
+  test("200: Responds with an array on the key of article", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("200: Comments object has props: comment_id, votes, created_at, author, body, article_id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .then(({ body: { comments } }) => {
+        comments.forEach((comment) => {
+          expect(typeof comment.comment_id).toBe("number");
+          expect(typeof comment.votes).toBe("number");
+          expect(typeof comment.created_at).toBe("string");
+          expect(typeof comment.author).toBe("string");
+          expect(typeof comment.body).toBe("string");
+          expect(typeof comment.article_id).toBe("number");
+          expect(comment.article_id).toBe(1);
+        });
+      });
+  });
+  test("400: responds with bad request when article_id is invalid", () => {
+    return request(app)
+      .get("/api/articles/bananas/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad Request");
+      });
+  });
+  test("404: responds with not found when article_id doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Article not found.");
+      });
+  });
+});
