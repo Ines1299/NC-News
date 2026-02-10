@@ -9,6 +9,9 @@ const NotFoundError = require("./errors/not-found-error.js");
 
 app.use(express.json());
 
+const path = require("path");
+app.use("/static", express.static(path.join(__dirname, "public")));
+
 app.use("/api/topics", topicRouter);
 
 app.use("/api/articles", articleRouter);
