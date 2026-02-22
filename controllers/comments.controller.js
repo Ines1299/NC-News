@@ -1,6 +1,7 @@
 const {
   getAllCommentsByArticleId,
   postAllCommentsByArticleId,
+  deleteAllCommentsByCommentId,
 } = require("../services/comments.service.js");
 
 exports.getCommentsByArticleId = (request, response, next) => {
@@ -31,6 +32,15 @@ exports.postCommentsByArticleId = (request, response, next) => {
   postAllCommentsByArticleId(article_id, username, commentBody)
     .then((comment) => {
       response.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.deleteCommentsByCommentId = (request, response, next) => {
+  const { comment_id } = request.params;
+  deleteAllCommentsByCommentId(comment_id)
+    .then((comment) => {
+      response.status(204).send();
     })
     .catch(next);
 };

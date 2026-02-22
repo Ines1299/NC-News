@@ -39,3 +39,16 @@ exports.insertCommentsByArticleId = (article_id, username, body) => {
       }
     });
 };
+
+exports.deleteThisCommentByCommentId = (comment_id) => {
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [
+      comment_id,
+    ])
+    .then(({ rows, rowCount }) => {
+      if (rowCount === 0) {
+        throw new NotFoundError("Comment not found", 404);
+      }
+      return rows[0];
+    });
+};

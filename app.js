@@ -14,6 +14,8 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.use("/api/articles/:article_id/comments", commentsRouter);
 
+app.use("/api/comments/:comment_id", commentsRouter);
+
 app.use("/api/topics", topicRouter);
 
 app.use("/api/articles", articleRouter);
