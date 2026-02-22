@@ -39,6 +39,13 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.status && err.message) {
+    return res.status(err.status).send({ message: err.message });
+  }
+  next(err);
+});
+
+app.use((err, req, res, next) => {
   console.log(err);
   res.status(500).send({ message: "Internal Server Error" });
 });

@@ -21,7 +21,7 @@ describe("GET: /api/topics", () => {
         expect(typeof body.topics).toBe("object");
       });
   });
-  test("200: tpoics array contains 3 topics", () => {
+  test("200: topics array contains 3 topics", () => {
     return request(app)
       .get("/api/topics")
       .then(({ body }) => {
