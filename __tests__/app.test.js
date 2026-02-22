@@ -224,3 +224,43 @@ describe("POST: /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("PATCH: /api/articles/:article_id", () => {
+  test("200: Responds with an article object", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .expect(200)
+      .send({ inc_votes: 200 })
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+        expect(body.votes).toBe(300);
+      });
+  });
+
+  test("400: responds with bad request when article_id is invalid", () => {
+    return request(app)
+      .patch("/api/articles/bananas")
+      .send({ inc_votes: 200 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad Request");
+      });
+  });
+  test("400: responds with bad request when theres no body", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({})
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad Request");
+      });
+  });
+  test("404: responds with not found when article_id doesn't exist", () => {
+    return request(app)
+      .patch("/api/articles/9999")
+      .send({ inc_votes: 200 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Article not found.");
+      });
+  });
+});

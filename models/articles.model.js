@@ -46,3 +46,22 @@ exports.fetchArticleById = (article_id) => {
       }
     });
 };
+
+exports.updateArticleVotes = (article_id, newVotes) => {
+  return db
+    .query(
+      `UPDATE articles
+SET votes = votes + $1
+WHERE article_id = $2
+RETURNING *;`,
+      [newVotes, article_id],
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        throw new NotFoundError();
+      } else {
+        console.log("model");
+        return rows[0];
+      }
+    });
+};

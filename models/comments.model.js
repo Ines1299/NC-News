@@ -32,7 +32,7 @@ exports.insertCommentsByArticleId = (article_id, username, body) => {
       [username, body, article_id],
     )
     .then(({ rows }) => {
-      if (rows.lenght === 0) {
+      if (rows.length === 0) {
         throw new NotFoundError();
       } else {
         return rows[0];

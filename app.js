@@ -12,13 +12,13 @@ app.use(express.json());
 const path = require("path");
 app.use("/static", express.static(path.join(__dirname, "public")));
 
+app.use("/api/articles/:article_id/comments", commentsRouter);
+
 app.use("/api/topics", topicRouter);
 
 app.use("/api/articles", articleRouter);
 
 app.use("/api/users", usersRouter);
-
-app.use("/api/articles/:article_id/comments", commentsRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof NotFoundError) {
