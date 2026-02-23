@@ -6,11 +6,14 @@ const articleRouter = require("./routes/articles.routes.js");
 const usersRouter = require("./routes/users.routes.js");
 const commentsRouter = require("./routes/comments.routes.js");
 const NotFoundError = require("./errors/not-found-error.js");
+const path = require("path");
+const cors = require("cors");
+
+app.use(cors());
 
 app.use(express.json());
 
-const path = require("path");
-app.use("/static", express.static(path.join(__dirname, "public")));
+app.use("/api", express.static(path.join(__dirname, "public")));
 
 app.use("/api/articles/:article_id/comments", commentsRouter);
 

@@ -47,3 +47,21 @@ body main {
   padding: 1.5em;
   box-sizing: border-box;
 }
+
+footer {
+  background-color: rgb(93, 0, 135);
+  height: 50px;
+  color: white;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-items: flex-start;
+}
+
+.footer-menu {
+  align-items: center;
+  justify-items: flex-start;
+}
