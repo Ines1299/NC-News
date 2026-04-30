@@ -11,3 +11,8 @@ Run npm run setup-dbs to create your database. Inside the .env files add PGDATAB
 
 ERC
 https://lucid.app/lucidchart/483b97ec-fbfc-4d07-a4e4-54ea1bd3705b/edit?viewport_loc=-1449%2C-596%2C2519%2C1685%2C0_0&invitationId=inv_6fbdd21b-53d1-48dd-97c7-ca2571813de0
+
+
+### Backend repo
+
+[→ View Backend Repo](https://github.com/Ines1299/Nc-news-frontend)
