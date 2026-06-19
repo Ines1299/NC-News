@@ -1,7 +1,8 @@
 const db = require("../db/connection.js");
 const NotFoundError = require("../errors/not-found-error.js");
+const BadRequestError = require("../errors/bad-request-error");
 
-exports.fetchArticles = (
+exports.fetchArticles = async (
   sort_by = "created_at",
   order = "DESC",
   topic = "",
@@ -20,26 +21,17 @@ exports.fetchArticles = (
   const topics = ["football", "coding", "cooking"];
 
   if (!sorts.includes(sort_by)) {
-    return Promise.reject({
-      status: 400,
-      message: "Invalid sort query",
-    });
+    throw new BadRequestError("Invalid sort query");
   }
 
   order = order.toUpperCase();
 
   if (!orders.includes(order)) {
-    return Promise.reject({
-      status: 400,
-      message: "Invalid order query",
-    });
+    throw new BadRequestError("Invalid order query");
   }
 
   if (topic && !topics.includes(topic)) {
-    return Promise.reject({
-      status: 400,
-      message: "Invalid topic",
-    });
+    throw new BadRequestError("Invalid topic");
   }
 
   let value = [];
@@ -105,7 +97,6 @@ RETURNING *;`,
       if (rows.length === 0) {
         throw new NotFoundError();
       } else {
-        console.log("model");
         return rows[0];
       }
     });
