@@ -13,6 +13,5 @@ exports.getSingleArticle = (article_id) => {
 };
 
 exports.patchArticle = (article_id, inc_votes) => {
-  console.log("service");
   return updateArticleVotes(article_id, inc_votes);
 };

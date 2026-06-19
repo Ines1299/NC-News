@@ -17,11 +17,7 @@ exports.fetchCommentsByArticleId = (article_id) => {
       [article_id],
     )
     .then(({ rows }) => {
-      if (rows.length === 0) {
-        throw new NotFoundError();
-      } else {
-        return rows;
-      }
+      return rows;
     });
 };
 
@@ -47,7 +43,7 @@ exports.deleteThisCommentByCommentId = (comment_id) => {
     ])
     .then(({ rows, rowCount }) => {
       if (rowCount === 0) {
-        throw new NotFoundError("Comment not found", 404);
+        throw new NotFoundError("Comment not found");
       }
       return rows[0];
     });

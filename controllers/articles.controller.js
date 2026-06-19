@@ -33,7 +33,6 @@ exports.patchArticleById = (request, response, next) => {
   patchArticle(article_id, inc_votes)
     .then((article) => {
       response.status(200).send(article);
-      console.log("controller");
     })
     .catch(next);
 };

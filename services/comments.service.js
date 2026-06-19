@@ -6,7 +6,9 @@ const {
 const { fetchArticleById } = require("../models/articles.model.js");
 
 exports.getAllCommentsByArticleId = (article_id) => {
-  return fetchCommentsByArticleId(article_id);
+  return fetchArticleById(article_id).then(() => {
+    return fetchCommentsByArticleId(article_id);
+  });
 };
 
 exports.postAllCommentsByArticleId = (article_id, username, body) => {
