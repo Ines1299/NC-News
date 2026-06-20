@@ -6,6 +6,7 @@ exports.fetchArticles = async (
   sort_by = "created_at",
   order = "DESC",
   topic = "",
+  search = "",
 ) => {
   const sorts = [
     "author",
@@ -47,9 +48,23 @@ exports.fetchArticles = async (
       CAST(COUNT(comments.comment_id) AS INT) AS comment_count FROM articles LEFT JOIN comments 
       ON articles.article_id = comments.article_id`;
 
+  const whereClauses = [];
+
   if (topic) {
     value.push(topic);
-    queryStr += ` WHERE articles.topic = $1`;
+    whereClauses.push(`articles.topic = $${value.length}`);
+  }
+
+  if (search) {
+    value.push(`%${search}%`);
+    const i = value.length;
+    whereClauses.push(
+      `(articles.title ILIKE $${i} OR articles.author ILIKE $${i} OR articles.topic ILIKE $${i})`,
+    );
+  }
+
+  if (whereClauses.length > 0) {
+    queryStr += ` WHERE ` + whereClauses.join(" AND ");
   }
 
   queryStr += `

@@ -291,3 +291,86 @@ describe("DELETE: /api/comments/:comment_id", () => {
       });
   });
 });
+
+describe("GET: /api/articles (sorting)", () => {
+  test("200: articles are sorted by created_at DESC by default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+
+  test("200: articles can be sorted by votes ascending", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=ASC")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("votes", { ascending: true });
+      });
+  });
+
+  test("200: articles can be sorted by title descending", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=DESC")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("title", { descending: true });
+      });
+  });
+
+  test("400: responds with bad request for invalid sort_by", () => {
+    return request(app)
+      .get("/api/articles?sort_by=bananas")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid sort query");
+      });
+  });
+
+  test("400: responds with bad request for invalid order", () => {
+    return request(app)
+      .get("/api/articles?order=sideways")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid order query");
+      });
+  });
+});
+
+describe("GET: /api/articles (search)", () => {
+  test("200: returns only articles matching the search term in title, author, or topic", () => {
+    return request(app)
+      .get("/api/articles?search=mitch")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles.length).toBeGreaterThan(0);
+        articles.forEach((article) => {
+          const matches =
+            article.title.toLowerCase().includes("mitch") ||
+            article.author.toLowerCase().includes("mitch") ||
+            article.topic.toLowerCase().includes("mitch");
+          expect(matches).toBe(true);
+        });
+      });
+  });
+
+  test("200: returns an empty array when no articles match the search term", () => {
+    return request(app)
+      .get("/api/articles?search=zzzznoresultszzzz")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toEqual([]);
+      });
+  });
+
+  test("200: search and sort can be combined", () => {
+    return request(app)
+      .get("/api/articles?search=a&sort_by=votes&order=DESC")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("votes", { descending: true });
+      });
+  });
+});
