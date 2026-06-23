@@ -7,6 +7,7 @@ exports.fetchArticles = async (
   order = "DESC",
   topic = "",
   search = "",
+  author = "",
 ) => {
   const sorts = [
     "author",
@@ -61,6 +62,10 @@ exports.fetchArticles = async (
     whereClauses.push(
       `(articles.title ILIKE $${i} OR articles.author ILIKE $${i} OR articles.topic ILIKE $${i})`,
     );
+  }
+
+  if (author) {
+    value.push(`articles.author= $${value.length}`);
   }
 
   if (whereClauses.length > 0) {

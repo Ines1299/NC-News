@@ -4,8 +4,8 @@ const {
   updateArticleVotes,
 } = require("../models/articles.model.js");
 
-exports.getAllArticles = (sort_by, order, topic, search) => {
-  return fetchArticles(sort_by, order, topic, search);
+exports.getAllArticles = (sort_by, order, topic, search, author) => {
+  return fetchArticles(sort_by, order, topic, search, author);
 };
 
 exports.getSingleArticle = (article_id) => {
