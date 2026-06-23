@@ -65,7 +65,8 @@ exports.fetchArticles = async (
   }
 
   if (author) {
-    value.push(`articles.author= $${value.length}`);
+    value.push(author);
+    whereClauses.push(`articles.author= $${value.length}`);
   }
 
   if (whereClauses.length > 0) {
